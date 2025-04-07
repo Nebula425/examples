@@ -1,0 +1,6 @@
+black==25.1.0
+behave==1.2.6
+google-cloud-network-connectivity==2.7.1
+google-cloud-compute==1.26.0
+google-auth==2.38.0
+ipaddress
