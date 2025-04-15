@@ -4,10 +4,10 @@ Feature: GCP Network Connectivity Center Redline Example
   So that I can ensure they comply with my network requirements
 
 #   Scenario: Verify VPC Spoke behaviours
-#     Given I have a GCP project "<>"
-#     And there is an NCC hub "<>" deployed within it
-#     And the "default" connectivity group auto-accept list contains "<>"
-#     When I create a VPC network "my-vpc-spoke-test" in project "<>"
+#     Given I have a GCP project "lab-hybrid-connectivity"
+#     And there is an NCC hub "se-us-ncc-hub" deployed within it
+#     And the "default" connectivity group auto-accept list contains "lab-tenant"
+#     When I create a VPC network "my-vpc-spoke-test" in project "lab-tenant"
 #     And add a subnet "my-vpc-spoke-subnet" to the VPC with cidr "10.0.4.0/24" in "us-south1"
 #     And I attach the VPC as a VPC spoke with name "my-test-vpc-spoke" to the NCC hub
 

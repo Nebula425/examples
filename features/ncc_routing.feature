@@ -3,10 +3,10 @@ Feature: GCP Network Connectivity Center Routing
   I want to verify deployed NCC resources have the correct behaviours when it comes to primary, secondary and tertiary Routing
 
   Scenario: Verify basic routing properties for NCC hub
-    Given I have a GCP project "<>"
-    When I get the route table for NCC hub "<>"
+    Given I have a GCP project "lab-hybrid-connectivity"
+    When I get the route table for NCC hub "se-us-ncc-hub"
     Then the NCC hub route table should be the "default" route table
-    And the NCC hub route table should have 3 active routes
+    And the NCC hub route table should have 8 active routes
     And the NCC hub route table does not contain any "240.0.0.0/4" routes
 
 #   Scenario: Verify hierarchical routing properties for NCC hub

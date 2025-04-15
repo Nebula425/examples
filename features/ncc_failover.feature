@@ -4,8 +4,8 @@ Feature: GCP Network Connectivity Center Failover Validation
   So that I can ensure they comply with my network requirements
 
 #   Scenario: Verify NCC primary failover behaviours
-#     Given I have a GCP project "<>"
-#     And there is an NCC hub "<>" deployed within it
+#     Given I have a GCP project "lab-hybrid-connectivity"
+#     And there is an NCC hub "se-us-ncc-hub" deployed within it
 #     And I have all VPN tunnels up in region "us-south1"
 #     And I have all hybrid spokes configured in region "us-south1"
 #     And I am receiving all default routes from the on-premise network from "us-south1, us-central, us-east4"

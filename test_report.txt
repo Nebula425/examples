@@ -1,0 +1,60 @@
+Feature: GCP Network Connectivity Center Failover Validation # features/ncc_failover.feature:1
+  As a cloud network engineer
+  I want to verify that when I change the state of the primary network path to on-premise, the secondary then becomes the expected network path.
+  So that I can ensure they comply with my network requirements
+Feature: GCP Network Connectivity Center Validation # features/ncc_resources.feature:1
+  As a cloud network engineer
+  I want to verify deployed NCC resources have the correct attributes
+  So that I can ensure they comply with my network requirements
+  Scenario: Verify NCC hub attributes                                    # features/ncc_resources.feature:6
+    Given I have a GCP project "lab-hybrid-connectivity"                 # features/steps/ncc_resources_steps.py:7
+    When I get the NCC hub "se-us-ncc-hub"                               # features/steps/ncc_resources_steps.py:32
+    Then the NCC hub should have description "NCC Hub for US geography." # features/steps/ncc_resources_steps.py:44
+    And the NCC hub should have a single connectivity group "default"    # features/steps/ncc_resources_steps.py:60
+    And the NCC hub should have at least 1 spokes                        # features/steps/ncc_resources_steps.py:89
+
+Feature: GCP Network Connectivity Center Routing # features/ncc_routing.feature:1
+  As a cloud network engineer
+  I want to verify deployed NCC resources have the correct behaviours when it comes to primary, secondary and tertiary Routing
+  Scenario: Verify basic routing properties for NCC hub                   # features/ncc_routing.feature:5
+    Given I have a GCP project "lab-hybrid-connectivity"                  # features/steps/ncc_resources_steps.py:7
+    When I get the route table for NCC hub "se-us-ncc-hub"                # features/steps/ncc_routing_steps.py:32
+    Then the NCC hub route table should be the "default" route table      # features/steps/ncc_routing_steps.py:47
+    And the NCC hub route table should have 8 active routes               # features/steps/ncc_routing_steps.py:62
+    And the NCC hub route table does not contain any "240.0.0.0/4" routes # features/steps/ncc_routing_steps.py:81
+
+Feature: GCP Network Connectivity Center Redline Example # features/redline_test.feature:1
+  As a cloud network engineer
+  I want to verify that as a VPC Spoke, I am not able to access the internet or public IPs.
+  So that I can ensure they comply with my network requirements
+Feature: GCP Network Connectivity Center VPC Spoke Validation # features/vpc_spoke.feature:1
+  As a cloud network engineer
+  I want to verify that when I attach a VPC to an NCC hub as a VPC Spoke, the VPC Spoke exhibits the correct behaviours
+  So that I can ensure they comply with my network requirements
+  Scenario: Verify VPC Spoke behaviours                                                      # features/vpc_spoke.feature:6
+    Given I have a GCP project "lab-hybrid-connectivity"                                     # features/steps/ncc_resources_steps.py:7
+    And there is an NCC hub "se-us-ncc-hub" deployed within it                               # features/steps/vpc_spoke_steps.py:33
+    And the "default" connectivity group auto-accept list contains "lab-tenant"              # features/steps/vpc_spoke_steps.py:53
+    When I create a VPC network "my-vpc-spoke-test" in project "lab-tenant"                  # features/steps/vpc_spoke_steps.py:67
+      Traceback (most recent call last):
+        File "/Users/jameskelly/Desktop/behave/.venv/lib/python3.9/site-packages/behave/model.py", line 1329, in run
+          match.run(runner.context)
+        File "/Users/jameskelly/Desktop/behave/.venv/lib/python3.9/site-packages/behave/matchers.py", line 98, in run
+          self.func(context, *args, **kwargs)
+        File "features/steps/vpc_spoke_steps.py", line 74, in step_create_vpc_network_in_remote_project
+          insert_vpc = network_client.insert(
+        File "/Users/jameskelly/Desktop/behave/.venv/lib/python3.9/site-packages/google/cloud/compute_v1/services/networks/client.py", line 1693, in insert
+          response = rpc(
+        File "/Users/jameskelly/Desktop/behave/.venv/lib/python3.9/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+          return wrapped_func(*args, **kwargs)
+        File "/Users/jameskelly/Desktop/behave/.venv/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 76, in error_remapped_callable
+          return callable_(*args, **kwargs)
+        File "/Users/jameskelly/Desktop/behave/.venv/lib/python3.9/site-packages/google/cloud/compute_v1/services/networks/transports/rest.py", line 1529, in __call__
+          raise core_exceptions.from_http_response(response)
+      google.api_core.exceptions.Conflict: 409 POST https://compute.googleapis.com/compute/v1/projects/lab-tenant/global/networks: The resource 'projects/lab-tenant/global/networks/my-vpc-spoke-test' already exists
+
+    And add a subnet "my-vpc-spoke-subnet" to the VPC with cidr "10.0.4.0/24" in "us-south1" # None
+    And I attach the VPC as a VPC spoke with name "my-test-vpc-spoke" to the NCC hub         # None
+    Then the VPC spoke should be in an "ACTIVE" state                                        # None
+    And the NCC hub route table should contain a route for the VPC spoke                     # None
+
